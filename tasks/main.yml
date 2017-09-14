@@ -1,0 +1,56 @@
+---
+- name: check distribution
+  fail:
+    msg: Not a Debian derivative distribution
+  when: ansible_os_family != "Debian"
+
+- name: Add a system user to run the build script
+  user:
+    generate_ssh_key: yes
+    name: "{{ pkgbuilder_user }}"
+    state: present
+  become: true
+
+- name: Prepare workspace for pkgbuilder
+  file:
+    path: "{{ pkgbuilder_home }}/{{ item }}"
+    recurse: yes
+    state: directory
+    owner: "{{ pkgbuilder_user }}"
+    group: "{{ pkgbuilder_user }}"
+  with_items:
+    - "{{ pkgbuilder_home }}"
+    - "{{ pkgbuilder_work }}"
+    - "{{ pkgbuilder_artifacts }}"
+  become: yes
+
+- name: Clone pkgbuilder repository
+  git:
+    repo: "https://github.com/oahong/pkgbuilder"
+    dest: "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}"
+
+- name: Install required packages
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ pkgbuilder_deps }}"
+  become: true
+
+- name: Install sudoers
+  template:
+    src: sudoer
+    dest: /etc/sudoers.d/deepin_pbuilder
+    mode: 0600
+    validate: '/usr/sbin/visudo -cf %s'
+  become: true
+
+- name: Create symlinks for executables
+  file:
+    src: "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}/{{ item }}"
+    path: "/usr/local/bin/{{ item }}"
+    state: link
+  with_items:
+    - cowimage
+    - deepin-buildpkg
+  become: true
+...
