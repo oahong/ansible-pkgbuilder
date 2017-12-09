@@ -36,6 +36,11 @@
   with_items: "{{ pkgbuilder_deps }}"
   become: true
 
+- name: Copy host trusted.gpg.d
+  command: cp -av /etc/apt/trusted.gpg.d "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}"/apt
+  register: output
+  failed_when: output.rc != 0
+
 - name: Install sudoers
   template:
     src: sudoer
