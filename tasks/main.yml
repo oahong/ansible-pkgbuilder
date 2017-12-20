@@ -1,8 +1,4 @@
 ---
-- name: check distribution
-  fail:
-    msg: Not a Debian derivative distribution
-  when: ansible_os_family != "deepin"
 
 - name: Add a system user to run the build script
   user:
