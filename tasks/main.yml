@@ -45,6 +45,12 @@
     validate: '/usr/sbin/visudo -cf %s'
   become: true
 
+- name: Remove old symlink
+  file:
+    src: /usr/local/bin/deepin-buildpkg
+    state: absent
+  become: true
+
 - name: Create symlinks for executables
   file:
     src: "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}/{{ item }}"
@@ -52,6 +58,6 @@
     state: link
   with_items:
     - cowimage
-    - deepin-buildpkg
+    - pkgbuilder
   become: true
 ...
