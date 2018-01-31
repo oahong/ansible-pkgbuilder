@@ -47,7 +47,7 @@
 
 - name: Remove old symlink
   file:
-    src: /usr/local/bin/deepin-buildpkg
+    path: /usr/local/bin/deepin-buildpkg
     state: absent
   become: true
 
