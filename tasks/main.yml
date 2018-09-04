@@ -9,21 +9,21 @@
 
 - name: Prepare workspace for pkgbuilder
   file:
-    path: "{{ pkgbuilder_home }}/{{ item }}"
+    path: "{{ pkgbuilder_base }}/{{ item }}"
     recurse: yes
     state: directory
     owner: "{{ pkgbuilder_user }}"
     group: "{{ pkgbuilder_user }}"
   with_items:
+    - "{{ pkgbuilder_base }}"
     - "{{ pkgbuilder_home }}"
-    - "{{ pkgbuilder_work }}"
     - "{{ pkgbuilder_artifacts }}"
   become: yes
 
 - name: Clone pkgbuilder repository
   git:
-    repo: "https://github.com/oahong/pkgbuilder"
-    dest: "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}"
+    repo: "{{ pkgbuilder_repository }}"
+    dest: "{{ pkgbuilder_base }}/{{ pkgbuilder_home }}"
 
 - name: Install required packages
   package:
@@ -33,7 +33,7 @@
   become: true
 
 - name: Copy host trusted.gpg.d
-  command: cp -av /etc/apt/trusted.gpg.d "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}"/apt
+  command: cp -av /etc/apt/trusted.gpg.d "{{ pkgbuilder_base }}/{{ pkgbuilder_home }}"/apt
   register: output
   failed_when: output.rc != 0
 
@@ -45,7 +45,7 @@
     validate: '/usr/sbin/visudo -cf %s'
   become: true
 
-- name: Remove old symlink
+- name: Remove old script executables
   file:
     path: /usr/local/bin/deepin-buildpkg
     state: absent
@@ -53,7 +53,7 @@
 
 - name: Create symlinks for executables
   file:
-    src: "{{ pkgbuilder_home }}/{{ pkgbuilder_work }}/{{ item }}"
+    src: "{{ pkgbuilder_base }}/{{ pkgbuilder_home }}/{{ item }}"
     path: "/usr/local/bin/{{ item }}"
     state: link
   with_items:

@@ -1,3 +1,14 @@
 ---
-pkgbuilder_home: /work
+become: false
 pkgbuilder_user: deepin
+
+# We'll put everything inside {{ pkgbuilder_base }}
+pkgbuilder_base: /work
+
+# scripts subdir
+pkgbuilder_work: pkgbuilder
+
+# build artifacts resides in artifacts subdir
+pkgbuilder_artifacts: artifacts
+
+pkgbuilder_repository: https://github.com/oahong/pkgbuilder-ansible-role

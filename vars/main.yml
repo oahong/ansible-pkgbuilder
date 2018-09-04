@@ -1,6 +1,4 @@
 ---
-pkgbuilder_work: pkgbuilder
-pkgbuilder_artifacts: artifacts
 
 pkgbuilder_deps:
   - build-essential
