@@ -7,6 +7,14 @@
     state: present
   become: true
 
+- name: Setup bashrc
+  blockinfile:
+    path: "{{ '~' + pkgbuilder_user + '/.bashrc' | expanduser }}"
+    block: |
+      export LINUX_KERNEL_ABI=4.4.15
+      export DEBEMAIL="sunway@deepin.com"
+      export DEBFULLNAME="deepin/sunway team"
+
 - name: Prepare workspace for pkgbuilder
   file:
     path: "{{ pkgbuilder_base }}/{{ item }}"
