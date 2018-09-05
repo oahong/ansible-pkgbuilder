@@ -6,9 +6,9 @@ pkgbuilder_user: deepin
 pkgbuilder_base: /work
 
 # scripts subdir
-pkgbuilder_work: pkgbuilder
+pkgbuilder_home: "{{ pkgbuilder_base }}"/pkgbuilder
 
 # build artifacts resides in artifacts subdir
-pkgbuilder_artifacts: artifacts
+pkgbuilder_artifacts: "{{ pkgbuilder_baes }}"/artifacts
 
 pkgbuilder_repository: https://github.com/oahong/pkgbuilder
