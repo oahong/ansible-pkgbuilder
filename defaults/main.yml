@@ -11,4 +11,4 @@ pkgbuilder_work: pkgbuilder
 # build artifacts resides in artifacts subdir
 pkgbuilder_artifacts: artifacts
 
-pkgbuilder_repository: https://github.com/oahong/pkgbuilder-ansible-role
+pkgbuilder_repository: https://github.com/oahong/pkgbuilder
